@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import '../styles/auth.scss';
 
 import illustrationImg from '../assets/images/illustration.svg';
@@ -21,7 +23,7 @@ export function NewRoom() {
             <input type='text' placeholder='Room name' />
             <Button type='submit'>Create room</Button>
           </form>
-          <p>Join another room <a href='#'>here</a>.</p>
+          <p>Join another room <Link to='/'>here</Link>.</p>
         </div>
       </main>
     </div>
