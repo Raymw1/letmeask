@@ -63,7 +63,8 @@
         margin-top: 16px;
       }
 
-      button, input {
+      button,
+      input {
         width: 100%;
       }
     }
@@ -92,7 +93,6 @@
     }
   }
 
-
   .separator {
     font-size: 14px;
     color: #a8a8b3;
@@ -107,7 +107,7 @@
       background: #a8a8b3;
       margin-right: 16px;
     }
-    
+
     &::after {
       content: '';
       flex: 1;
@@ -117,4 +117,3 @@
     }
   }
 }
-

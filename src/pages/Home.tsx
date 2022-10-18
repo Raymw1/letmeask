@@ -3,6 +3,7 @@ import '../styles/auth.scss';
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
 import googleIconImg from '../assets/images/google-icon.svg';
+import { Button } from '../components/Button';
 
 export function Home() {
   return (
@@ -22,7 +23,7 @@ export function Home() {
           <div className='separator'>or join a room</div>
           <form>
             <input type='text' placeholder='Use a room code' />
-            <button type='submit'>Join the room</button>
+            <Button type='submit'>Join the room</Button>
           </form>
         </div>
       </main>
