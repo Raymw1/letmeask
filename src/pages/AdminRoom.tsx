@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import logoImg from '../assets/images/logo.svg';
 import deleteImg from '../assets/images/delete.svg';
@@ -9,7 +9,7 @@ import { RoomCode } from '../components/RoomCode';
 import { useAuth } from '../hooks/useAuth';
 import { Question } from '../components/Question';
 import { useRoom } from '../hooks/useRoom';
-import { ref, remove } from 'firebase/database';
+import { ref, remove, update } from 'firebase/database';
 import { database } from '../services/firebase';
 
 type RoomParams = {
@@ -30,6 +30,8 @@ export function AdminRoom() {
   const roomId = params.id;
   const { user } = useAuth();
   const { questions, title } = useRoom(roomId);
+  
+  const navigate = useNavigate();
 
   async function handleDeleteQuestion(questionId: string) {
     const confirmation = window.confirm(
@@ -43,6 +45,12 @@ export function AdminRoom() {
     await remove(questionRef);
   }
 
+  async function handleEndRoom() {
+    const roomRef = ref(database, `rooms/${roomId}`);
+    await update(roomRef, { endedAt: new Date() });
+    navigate('/');
+  }
+
   return (
     <div id='page-room'>
       <header>
@@ -50,7 +58,7 @@ export function AdminRoom() {
           <img src={logoImg} alt='Letmeask' />
           <div>
             <RoomCode code={roomId} />
-            <Button isOutlined>Remove room</Button>
+            <Button isOutlined onClick={handleEndRoom}>Remove room</Button>
           </div>
         </div>
       </header>
