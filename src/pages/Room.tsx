@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import logoImg from '../assets/images/logo.svg';
@@ -7,26 +7,14 @@ import '../styles/room.scss';
 import { Button } from '../components/Button';
 import { RoomCode } from '../components/RoomCode';
 import { useAuth } from '../hooks/useAuth';
-import { onValue, push, ref } from 'firebase/database';
+import { push, ref } from 'firebase/database';
 import { database } from '../services/firebase';
 import { Question } from '../components/Question';
+import { useRoom } from '../hooks/useRoom';
 
 type RoomParams = {
   id: string;
 };
-
-type FirebaseQuestions = Record<
-  string,
-  {
-    author: {
-      name: string;
-      avatar: string;
-    };
-    content: string;
-    isAnswered: boolean;
-    isHighlighted: boolean;
-  }
->;
 
 type QuestionType = {
   id: string;
@@ -35,19 +23,15 @@ type QuestionType = {
     avatar: string;
   };
   content: string;
-  isAnswered: boolean;
-  isHighlighted: boolean;
 };
 
 export function Room() {
-  const { user } = useAuth();
-
-  const [newQuestion, setNewQuestion] = useState('');
-  const [questions, setQuestions] = useState<QuestionType[]>([]);
-  const [title, setTitle] = useState('');
-
   const params = useParams() as RoomParams;
   const roomId = params.id;
+  const { user } = useAuth();
+  const { questions, title } = useRoom(roomId);
+
+  const [newQuestion, setNewQuestion] = useState('');
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
@@ -62,25 +46,6 @@ export function Room() {
     await push(ref(database, `rooms/${roomId}/questions`), question);
     setNewQuestion('');
   }
-
-  useEffect(() => {
-    const roomRef = ref(database, `rooms/${roomId}`);
-    onValue(roomRef, (room) => {
-      const databaseRoom = room.val();
-      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
-      const parsedQuestions = Object.entries(firebaseQuestions).map(
-        ([key, value]) => ({
-          id: key,
-          content: value.content,
-          author: value.author,
-          isHighlighted: value.isHighlighted,
-          isAnswered: value.isAnswered,
-        })
-      );
-      setTitle(databaseRoom.title);
-      setQuestions(parsedQuestions);
-    });
-  }, [roomId]);
 
   return (
     <div id='page-room'>
