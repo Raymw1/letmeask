@@ -56,8 +56,8 @@ export function useRoom(roomId: string) {
       );
       setTitle(databaseRoom.title);
       setQuestions(parsedQuestions);
-      return () => unsubscribeRoomListener();
     });
+    return () => unsubscribeRoomListener();
   }, [roomId, user]);
 
   return { questions, title };

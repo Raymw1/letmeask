@@ -25,6 +25,8 @@ type QuestionType = {
   content: string;
   likeCount: number;
   likeId: string | undefined;
+  isAnswered: boolean;
+  isHighlighted: boolean;
 };
 
 export function Room() {
@@ -109,8 +111,10 @@ export function Room() {
               content={question.content}
               author={question.author}
               key={question.id}
+              isAnswered={question.isAnswered}
+              isHighlighted={question.isHighlighted}
             >
-              {user ? (
+              {user && !question.isAnswered ? (
                 <button
                   className={`like-button ${question.likeId && 'liked'}`}
                   type='button'
